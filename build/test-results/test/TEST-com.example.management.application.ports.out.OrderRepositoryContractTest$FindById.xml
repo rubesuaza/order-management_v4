@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="findById" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-02-04T02:44:56" hostname="RubenS" time="0.103">
+<testsuite name="findById" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-02-04T02:49:28" hostname="RubenS" time="0.004">
   <properties/>
-  <testcase name="returns_empty_when_not_found()" classname="com.example.management.application.ports.out.OrderRepositoryContractTest$FindById" time="0.103"/>
+  <testcase name="returns_empty_when_not_found()" classname="com.example.management.application.ports.out.OrderRepositoryContractTest$FindById" time="0.004"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

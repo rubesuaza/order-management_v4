@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="invariantes" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-02-04T02:49:26" hostname="RubenS" time="0.047">
+  <properties/>
+  <testcase name="rechaza productId vacío" classname="com.example.management.domain.model.OrderLineTest$Invariants" time="0.007"/>
+  <testcase name="crea línea válida con cantidad positiva y precio no negativo" classname="com.example.management.domain.model.OrderLineTest$Invariants" time="0.004"/>
+  <testcase name="rechaza cantidad cero" classname="com.example.management.domain.model.OrderLineTest$Invariants" time="0.004"/>
+  <testcase name="rechaza precio unitario negativo" classname="com.example.management.domain.model.OrderLineTest$Invariants" time="0.003"/>
+  <testcase name="lineTotal es quantity * unitPrice" classname="com.example.management.domain.model.OrderLineTest$Invariants" time="0.002"/>
+  <testcase name="rechaza productId nulo" classname="com.example.management.domain.model.OrderLineTest$Invariants" time="0.004"/>
+  <testcase name="rechaza unitPrice nulo" classname="com.example.management.domain.model.OrderLineTest$Invariants" time="0.002"/>
+  <testcase name="rechaza cantidad negativa" classname="com.example.management.domain.model.OrderLineTest$Invariants" time="0.002"/>
+  <testcase name="acepta precio cero" classname="com.example.management.domain.model.OrderLineTest$Invariants" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

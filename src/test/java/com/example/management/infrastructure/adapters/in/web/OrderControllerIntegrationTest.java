@@ -59,7 +59,7 @@ class OrderControllerIntegrationTest {
 
     @Test
     void get_by_id_returns_404_when_not_found() throws Exception {
-        mockMvc.perform(get("/api/orders/00000000-0000-0000-0000-000000000000")))
+        mockMvc.perform(get("/api/orders/00000000-0000-0000-0000-000000000000"))
                 .andExpect(status().isNotFound());
     }
 }
