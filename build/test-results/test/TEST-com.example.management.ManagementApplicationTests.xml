@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.management.ManagementApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-02-04T02:39:36" hostname="RubenS" time="1.541">
+  <properties/>
+  <testcase name="contextLoads()" classname="com.example.management.ManagementApplicationTests" time="1.541"/>
+  <system-out><![CDATA[21:39:32.773 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.example.management.ManagementApplicationTests]: ManagementApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+21:39:32.941 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.example.management.ManagementApplication for test class com.example.management.ManagementApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.0)
+
+2026-02-03T21:39:33.864-05:00  INFO 45230 --- [management] [    Test worker] c.e.m.ManagementApplicationTests         : Starting ManagementApplicationTests using Java 17.0.18 with PID 45230 (started by root in /root/agent_code_generator/workspaces/order_management_workspace/order-management_v4)
+2026-02-03T21:39:33.867-05:00  INFO 45230 --- [management] [    Test worker] c.e.m.ManagementApplicationTests         : No active profile set, falling back to 1 default profile: "default"
+2026-02-03T21:39:36.265-05:00  INFO 45230 --- [management] [    Test worker] c.e.m.ManagementApplicationTests         : Started ManagementApplicationTests in 3.029 seconds (process running for 5.106)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
