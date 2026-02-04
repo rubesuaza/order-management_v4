@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="save" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-02-04T02:49:28" hostname="RubenS" time="0.006">
+<testsuite name="save" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-02-04T02:52:20" hostname="RubenS" time="0.006">
   <properties/>
   <testcase name="findById_returns_saved_order()" classname="com.example.management.application.ports.out.OrderRepositoryContractTest$Save" time="0.003"/>
   <testcase name="persists_order_and_returns_same_instance()" classname="com.example.management.application.ports.out.OrderRepositoryContractTest$Save" time="0.001"/>

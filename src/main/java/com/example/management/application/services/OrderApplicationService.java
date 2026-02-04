@@ -8,6 +8,7 @@ import com.example.management.domain.model.OrderLine;
 import com.example.management.domain.model.OrderStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,11 +27,15 @@ public class OrderApplicationService implements CreateOrderUseCase, GetOrderUseC
 
     @Override
     public Order create(CreateOrderUseCase.CreateOrderCommand command) {
-        var lines = command.lines().stream()
+        Order order = buildOrderFromCommand(command);
+        return orderRepository.save(order);
+    }
+
+    private Order buildOrderFromCommand(CreateOrderUseCase.CreateOrderCommand command) {
+        List<OrderLine> lines = command.lines().stream()
                 .map(dto -> new OrderLine(dto.productId(), dto.quantity(), dto.unitPrice()))
                 .toList();
-        var order = new Order(UUID.randomUUID(), command.customerId(), OrderStatus.DRAFT, lines);
-        return orderRepository.save(order);
+        return new Order(UUID.randomUUID(), command.customerId(), OrderStatus.DRAFT, lines);
     }
 
     @Override

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="create" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-02-04T02:49:26" hostname="RubenS" time="0.088">
+<testsuite name="create" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-02-04T02:52:18" hostname="RubenS" time="0.08">
   <properties/>
-  <testcase name="devuelve el orden retornado por el repositorio" classname="com.example.management.application.services.OrderApplicationServiceTest$Create" time="0.016"/>
-  <testcase name="lanza InvalidOrderException cuando customerId es blanco" classname="com.example.management.application.services.OrderApplicationServiceTest$Create" time="0.014"/>
+  <testcase name="devuelve el orden retornado por el repositorio" classname="com.example.management.application.services.OrderApplicationServiceTest$Create" time="0.012"/>
+  <testcase name="lanza InvalidOrderException cuando customerId es blanco" classname="com.example.management.application.services.OrderApplicationServiceTest$Create" time="0.011"/>
   <testcase name="lanza InvalidOrderException cuando productId es blanco" classname="com.example.management.application.services.OrderApplicationServiceTest$Create" time="0.007"/>
   <testcase name="lanza InvalidOrderException cuando una línea tiene cantidad inválida" classname="com.example.management.application.services.OrderApplicationServiceTest$Create" time="0.007"/>
-  <testcase name="construye Order con líneas y persiste devolviendo el orden guardado" classname="com.example.management.application.services.OrderApplicationServiceTest$Create" time="0.03"/>
+  <testcase name="construye Order con líneas y persiste devolviendo el orden guardado" classname="com.example.management.application.services.OrderApplicationServiceTest$Create" time="0.026"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

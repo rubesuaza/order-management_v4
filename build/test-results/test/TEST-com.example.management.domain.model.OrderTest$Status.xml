@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="estados" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-02-04T02:49:26" hostname="RubenS" time="0.002">
+<testsuite name="estados" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-02-04T02:52:18" hostname="RubenS" time="0.003">
   <properties/>
-  <testcase name="acepta todos los estados válidos" classname="com.example.management.domain.model.OrderTest$Status" time="0.002"/>
+  <testcase name="acepta todos los estados válidos" classname="com.example.management.domain.model.OrderTest$Status" time="0.003"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

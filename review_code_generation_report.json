@@ -1,0 +1,55 @@
+{
+  "status": "needs_correction",
+  "structure_compliance": {
+    "score": 100,
+    "missing_files": []
+  },
+  "domain_compliance": {
+    "score": 72,
+    "missing_entities": [
+      "Money (Value Object)",
+      "Address (Value Object)"
+    ],
+    "notes": "Order tiene id, status, lines (OrderLine), customerId y total (BigDecimal). Falta createdAt y totalAmount como Money. OrderLine cumple productId/quantity/unitPrice pero con tipos primitivos en lugar de Money/UUID. OrderStatus usa DRAFT, CONFIRMED, SHIPPED, CANCELLED; domain_definition exige PENDING, PAID, SHIPPED, DELIVERED, CANCELLED."
+  },
+  "test_results": {
+    "command_executed": "./gradlew test",
+    "passed": true,
+    "total_tests": 31,
+    "failures": 0,
+    "output_summary": "BUILD SUCCESSFUL in 14s. 4 actionable tasks: 4 up-to-date."
+  },
+  "gaps": [
+    {
+      "severity": "medium",
+      "category": "domain",
+      "description": "Falta el Value Object Money (amount, currency) definido en domain_definition.md. Order y OrderLine usan BigDecimal para total/unitPrice.",
+      "fix_suggestion": "Crear clase Money en domain/model con amount (BigDecimal), currency (String, default USD) y operaciones add/subtract/multiply. Refactorizar Order.total y OrderLine.unitPrice/lineTotal a Money."
+    },
+    {
+      "severity": "low",
+      "category": "domain",
+      "description": "Falta el Value Object Address (street, city, zipCode, country) definido en domain_definition.md.",
+      "fix_suggestion": "Añadir Address en domain/model si el flujo de pedidos requiere dirección de envío; si no se usa aún, documentar como opcional o añadir cuando se implemente envío."
+    },
+    {
+      "severity": "medium",
+      "category": "domain",
+      "description": "Order no tiene el atributo createdAt (LocalDateTime) definido en domain_definition.md.",
+      "fix_suggestion": "Añadir campo createdAt en Order, asignándolo en el constructor (p. ej. LocalDateTime.now() o inyectado para tests)."
+    },
+    {
+      "severity": "low",
+      "category": "domain",
+      "description": "OrderStatus en código es DRAFT, CONFIRMED, SHIPPED, CANCELLED; domain_definition.md exige PENDING, PAID, SHIPPED, DELIVERED, CANCELLED.",
+      "fix_suggestion": "Alinear enum OrderStatus con la definición: PENDING, PAID, SHIPPED, DELIVERED, CANCELLED (mapear DRAFT->PENDING, CONFIRMED->PAID y añadir DELIVERED)."
+    },
+    {
+      "severity": "low",
+      "category": "tech_stack",
+      "description": "tech_stack.md indica Lombok y AssertJ; build.gradle no declara Lombok ni AssertJ.",
+      "fix_suggestion": "Añadir dependencias Lombok (compileOnly) y AssertJ (testImplementation) en build.gradle si se desea cumplir estrictamente con tech_stack.md."
+    }
+  ],
+  "next_recommended_action": "Alinear dominio con domain_definition.md (Money, createdAt, OrderStatus, opcionalmente Address) y luego ejecutar git_operations o seguir con siguientes flujos."
+}

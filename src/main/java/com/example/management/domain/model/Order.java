@@ -37,7 +37,11 @@ public final class Order {
         this.customerId = customerId;
         this.status = status;
         this.lines = List.copyOf(lines);
-        this.total = lines.stream()
+        this.total = calculateTotalFromLines(lines);
+    }
+
+    private static BigDecimal calculateTotalFromLines(List<OrderLine> lines) {
+        return lines.stream()
                 .map(OrderLine::getLineTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }

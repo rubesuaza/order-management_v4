@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="OrderController integration" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-02-04T02:49:27" hostname="RubenS" time="0.566">
+<testsuite name="OrderController integration" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-02-04T02:52:19" hostname="RubenS" time="0.506">
   <properties/>
-  <testcase name="create_order_returns_201_and_order_with_id()" classname="com.example.management.infrastructure.adapters.in.web.OrderControllerIntegrationTest" time="0.555"/>
-  <testcase name="get_by_id_returns_404_when_not_found()" classname="com.example.management.infrastructure.adapters.in.web.OrderControllerIntegrationTest" time="0.009"/>
-  <system-out><![CDATA[2026-02-03T21:49:26.503-05:00  INFO 50868 --- [management] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.management.infrastructure.adapters.in.web.OrderControllerIntegrationTest]: OrderControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-02-03T21:49:26.582-05:00  INFO 50868 --- [management] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.management.ManagementApplication for test class com.example.management.infrastructure.adapters.in.web.OrderControllerIntegrationTest
+  <testcase name="create_order_returns_201_and_order_with_id()" classname="com.example.management.infrastructure.adapters.in.web.OrderControllerIntegrationTest" time="0.495"/>
+  <testcase name="get_by_id_returns_404_when_not_found()" classname="com.example.management.infrastructure.adapters.in.web.OrderControllerIntegrationTest" time="0.008"/>
+  <system-out><![CDATA[2026-02-03T21:52:18.507-05:00  INFO 52408 --- [management] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.management.infrastructure.adapters.in.web.OrderControllerIntegrationTest]: OrderControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-02-03T21:52:18.636-05:00  INFO 52408 --- [management] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.management.ManagementApplication for test class com.example.management.infrastructure.adapters.in.web.OrderControllerIntegrationTest
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -14,12 +14,12 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.2.0)
 
-2026-02-03T21:49:26.686-05:00  INFO 50868 --- [management] [    Test worker] m.i.a.i.w.OrderControllerIntegrationTest : Starting OrderControllerIntegrationTest using Java 17.0.18 with PID 50868 (started by root in /root/agent_code_generator/workspaces/order_management_workspace/order-management_v4)
-2026-02-03T21:49:26.687-05:00  INFO 50868 --- [management] [    Test worker] m.i.a.i.w.OrderControllerIntegrationTest : No active profile set, falling back to 1 default profile: "default"
-2026-02-03T21:49:27.515-05:00  INFO 50868 --- [management] [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2026-02-03T21:49:27.516-05:00  INFO 50868 --- [management] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2026-02-03T21:49:27.525-05:00  INFO 50868 --- [management] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 3 ms
-2026-02-03T21:49:27.543-05:00  INFO 50868 --- [management] [    Test worker] m.i.a.i.w.OrderControllerIntegrationTest : Started OrderControllerIntegrationTest in 0.947 seconds (process running for 7.694)
+2026-02-03T21:52:18.819-05:00  INFO 52408 --- [management] [    Test worker] m.i.a.i.w.OrderControllerIntegrationTest : Starting OrderControllerIntegrationTest using Java 17.0.18 with PID 52408 (started by root in /root/agent_code_generator/workspaces/order_management_workspace/order-management_v4)
+2026-02-03T21:52:18.820-05:00  INFO 52408 --- [management] [    Test worker] m.i.a.i.w.OrderControllerIntegrationTest : No active profile set, falling back to 1 default profile: "default"
+2026-02-03T21:52:19.534-05:00  INFO 52408 --- [management] [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-02-03T21:52:19.535-05:00  INFO 52408 --- [management] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-02-03T21:52:19.541-05:00  INFO 52408 --- [management] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 3 ms
+2026-02-03T21:52:19.557-05:00  INFO 52408 --- [management] [    Test worker] m.i.a.i.w.OrderControllerIntegrationTest : Started OrderControllerIntegrationTest in 0.895 seconds (process running for 7.563)
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

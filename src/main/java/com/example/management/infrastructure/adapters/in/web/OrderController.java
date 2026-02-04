@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -32,13 +35,12 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<OrderResponse> create(@RequestBody CreateOrderRequest request) {
-        var lines = request.lines() != null ? request.lines() : java.util.List.<OrderLineRequest>of();
-        var command = new CreateOrderUseCase.CreateOrderCommand(
-                request.customerId(),
-                lines.stream()
-                        .map(l -> new CreateOrderUseCase.OrderLineDto(l.productId(), l.quantity(), l.unitPrice()))
-                        .toList()
-        );
+        List<CreateOrderUseCase.OrderLineDto> lineDtos = Optional.ofNullable(request.lines())
+                .orElseGet(List::of)
+                .stream()
+                .map(l -> new CreateOrderUseCase.OrderLineDto(l.productId(), l.quantity(), l.unitPrice()))
+                .toList();
+        var command = new CreateOrderUseCase.CreateOrderCommand(request.customerId(), lineDtos);
         Order order = createOrderUseCase.create(command);
         return ResponseEntity.status(HttpStatus.CREATED).body(OrderResponse.from(order));
     }
@@ -51,15 +53,15 @@ public class OrderController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    public record CreateOrderRequest(String customerId, java.util.List<OrderLineRequest> lines) {}
-    public record OrderLineRequest(String productId, int quantity, java.math.BigDecimal unitPrice) {}
+    public record CreateOrderRequest(String customerId, List<OrderLineRequest> lines) {}
+    public record OrderLineRequest(String productId, int quantity, BigDecimal unitPrice) {}
 
     public record OrderResponse(
             UUID id,
             String customerId,
             String status,
-            java.util.List<OrderLineResponse> lines,
-            java.math.BigDecimal total
+            List<OrderLineResponse> lines,
+            BigDecimal total
     ) {
         static OrderResponse from(Order order) {
             var lineResponses = order.getLines().stream()
@@ -74,5 +76,5 @@ public class OrderController {
             );
         }
     }
-    public record OrderLineResponse(String productId, int quantity, java.math.BigDecimal unitPrice, java.math.BigDecimal lineTotal) {}
+    public record OrderLineResponse(String productId, int quantity, BigDecimal unitPrice, BigDecimal lineTotal) {}
 }

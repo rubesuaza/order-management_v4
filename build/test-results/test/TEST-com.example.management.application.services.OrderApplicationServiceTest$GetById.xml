@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="getById" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-02-04T02:49:25" hostname="RubenS" time="0.583">
+<testsuite name="getById" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-02-04T02:52:17" hostname="RubenS" time="0.499">
   <properties/>
-  <testcase name="delega en repository y devuelve Optional vacío cuando no existe" classname="com.example.management.application.services.OrderApplicationServiceTest$GetById" time="0.555"/>
-  <testcase name="delega en repository y devuelve Optional presente cuando existe" classname="com.example.management.application.services.OrderApplicationServiceTest$GetById" time="0.023"/>
+  <testcase name="delega en repository y devuelve Optional vacío cuando no existe" classname="com.example.management.application.services.OrderApplicationServiceTest$GetById" time="0.476"/>
+  <testcase name="delega en repository y devuelve Optional presente cuando existe" classname="com.example.management.application.services.OrderApplicationServiceTest$GetById" time="0.015"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
