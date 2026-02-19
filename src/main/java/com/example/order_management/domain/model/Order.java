@@ -139,4 +139,46 @@ public class Order {
             }
         }
     }
+    
+    /**
+     * Factory method to reconstruct an Order from persistence.
+     * Public to be used by infrastructure adapters.
+     */
+    public static Order reconstruct(UUID id, UUID customerId, List<OrderItem> items, 
+                            OrderStatus status, LocalDateTime createdAt) {
+        if (id == null) {
+            throw new IllegalArgumentException("Id cannot be null");
+        }
+        if (customerId == null) {
+            throw new IllegalArgumentException("CustomerId cannot be null");
+        }
+        if (items == null || items.isEmpty()) {
+            throw new IllegalArgumentException("Order must have at least one item");
+        }
+        if (status == null) {
+            throw new IllegalArgumentException("Status cannot be null");
+        }
+        if (createdAt == null) {
+            throw new IllegalArgumentException("CreatedAt cannot be null");
+        }
+        
+        Order order = new Order(customerId, items);
+        try {
+            java.lang.reflect.Field idField = Order.class.getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(order, id);
+            
+            java.lang.reflect.Field createdAtField = Order.class.getDeclaredField("createdAt");
+            createdAtField.setAccessible(true);
+            createdAtField.set(order, createdAt);
+            
+            java.lang.reflect.Field statusField = Order.class.getDeclaredField("status");
+            statusField.setAccessible(true);
+            statusField.set(order, status);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to reconstruct Order from persistence", e);
+        }
+        
+        return order;
+    }
 }
