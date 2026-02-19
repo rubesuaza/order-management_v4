@@ -63,7 +63,7 @@ class OrderRepositoryAdapterTest {
             new BigDecimal("31.00"), "USD", order.getCreatedAt()
         );
         
-        when(jpaRepository.findById(any())).thenReturn(Optional.empty());
+        when(jpaRepository.findByIdWithItems(any())).thenReturn(Optional.empty());
         when(mapper.toEntity(order, null)).thenReturn(entity);
         when(jpaRepository.save(entity)).thenReturn(savedEntity);
         when(mapper.toDomain(savedEntity)).thenReturn(order);
@@ -83,11 +83,13 @@ class OrderRepositoryAdapterTest {
             orderId, customerId, "PENDING",
             new BigDecimal("31.00"), "USD", java.time.LocalDateTime.now()
         );
-        Order order = new Order(customerId, List.of(
-            new OrderItem(productId, 2, new Money(new BigDecimal("15.50")))
-        ));
+        Order order = Order.reconstruct(
+            orderId, customerId,
+            List.of(new OrderItem(productId, 2, new Money(new BigDecimal("15.50")))),
+            OrderStatus.PENDING, java.time.LocalDateTime.now()
+        );
         
-        when(jpaRepository.findById(orderId)).thenReturn(Optional.of(entity));
+        when(jpaRepository.findByIdWithItems(orderId)).thenReturn(Optional.of(entity));
         when(mapper.toDomain(entity)).thenReturn(order);
         
         // When
@@ -101,7 +103,7 @@ class OrderRepositoryAdapterTest {
     @Test
     void shouldReturnEmptyWhenOrderNotFound() {
         // Given
-        when(jpaRepository.findById(orderId)).thenReturn(Optional.empty());
+        when(jpaRepository.findByIdWithItems(orderId)).thenReturn(Optional.empty());
         
         // When
         Optional<Order> result = adapter.findById(orderId);

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * Mapper between Domain Order aggregate and Infrastructure OrderEntity.
@@ -72,8 +71,8 @@ public class OrderMapper {
                     );
                 }
             })
-            .collect(Collectors.toList());
-        
+            .toList();
+
         entity.setItems(itemEntities);
         return entity;
     }
@@ -95,15 +94,16 @@ public class OrderMapper {
                 item.getQuantity(),
                 new Money(item.getUnitPrice(), entity.getCurrency())
             ))
-            .collect(Collectors.toList());
+            .toList();
         
-        // Use the factory method to reconstruct Order from persistence
+        Money totalAmount = new Money(entity.getTotalAmount(), entity.getCurrency());
         return Order.reconstruct(
             entity.getId(),
             entity.getCustomerId(),
             domainItems,
             OrderStatus.valueOf(entity.getStatus()),
-            entity.getCreatedAt()
+            entity.getCreatedAt(),
+            totalAmount
         );
     }
 }

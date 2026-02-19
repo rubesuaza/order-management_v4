@@ -25,21 +25,49 @@ public class Order {
     private static final BigDecimal MINIMUM_ORDER_VALUE = new BigDecimal("10.00");
     
     public Order(UUID customerId, List<OrderItem> items) {
+        this(UUID.randomUUID(), customerId, items, OrderStatus.PENDING, LocalDateTime.now());
+    }
+
+    /**
+     * Private constructor for creating a new Order (enforces business rules).
+     */
+    private Order(UUID id, UUID customerId, List<OrderItem> items, OrderStatus status, LocalDateTime createdAt) {
+        if (id == null) {
+            throw new IllegalArgumentException("Id cannot be null");
+        }
         if (customerId == null) {
             throw new IllegalArgumentException("CustomerId cannot be null");
         }
         if (items == null || items.isEmpty()) {
             throw new IllegalArgumentException("Order must have at least one item");
         }
-        
-        this.id = UUID.randomUUID();
-        this.status = OrderStatus.PENDING;
-        this.createdAt = LocalDateTime.now();
+        if (status == null) {
+            throw new IllegalArgumentException("Status cannot be null");
+        }
+        if (createdAt == null) {
+            throw new IllegalArgumentException("CreatedAt cannot be null");
+        }
+        this.id = id;
         this.customerId = customerId;
         this.items = new ArrayList<>(items);
-        
+        this.status = status;
+        this.createdAt = createdAt;
         validateCurrencyConsistency();
         this.totalAmount = calculateTotal();
+    }
+
+    /**
+     * Private constructor for reconstructing an Order from persistence.
+     * Bypasses business rule validations; state is assumed valid from DB.
+     */
+    private Order(UUID id, UUID customerId, List<OrderItem> items, OrderStatus status,
+                  LocalDateTime createdAt, Money totalAmount) {
+        this.id = id;
+        this.customerId = customerId;
+        this.items = items != null ? new ArrayList<>(items) : new ArrayList<>();
+        this.status = status;
+        this.createdAt = createdAt;
+        this.totalAmount = totalAmount != null ? totalAmount : new Money(BigDecimal.ZERO, "USD");
     }
     
     public UUID getId() {
@@ -114,13 +142,10 @@ public class Order {
     }
     
     private Money calculateTotal() {
-        Money total = new Money(BigDecimal.ZERO, items.get(0).getUnitPrice().getCurrency());
-        
-        for (OrderItem item : items) {
-            total = total.add(item.calculateSubtotal());
-        }
-        
-        return total;
+        String currency = items.get(0).getUnitPrice().getCurrency();
+        return items.stream()
+            .map(OrderItem::calculateSubtotal)
+            .reduce(new Money(BigDecimal.ZERO, currency), Money::add);
     }
     
     private void validateCurrencyConsistency() {
@@ -142,43 +167,10 @@ public class Order {
     
     /**
      * Factory method to reconstruct an Order from persistence.
-     * Public to be used by infrastructure adapters.
+     * Uses a dedicated private constructor that only assigns state (no validation).
      */
-    public static Order reconstruct(UUID id, UUID customerId, List<OrderItem> items, 
-                            OrderStatus status, LocalDateTime createdAt) {
-        if (id == null) {
-            throw new IllegalArgumentException("Id cannot be null");
-        }
-        if (customerId == null) {
-            throw new IllegalArgumentException("CustomerId cannot be null");
-        }
-        if (items == null || items.isEmpty()) {
-            throw new IllegalArgumentException("Order must have at least one item");
-        }
-        if (status == null) {
-            throw new IllegalArgumentException("Status cannot be null");
-        }
-        if (createdAt == null) {
-            throw new IllegalArgumentException("CreatedAt cannot be null");
-        }
-        
-        Order order = new Order(customerId, items);
-        try {
-            java.lang.reflect.Field idField = Order.class.getDeclaredField("id");
-            idField.setAccessible(true);
-            idField.set(order, id);
-            
-            java.lang.reflect.Field createdAtField = Order.class.getDeclaredField("createdAt");
-            createdAtField.setAccessible(true);
-            createdAtField.set(order, createdAt);
-            
-            java.lang.reflect.Field statusField = Order.class.getDeclaredField("status");
-            statusField.setAccessible(true);
-            statusField.set(order, status);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to reconstruct Order from persistence", e);
-        }
-        
-        return order;
+    public static Order reconstruct(UUID id, UUID customerId, List<OrderItem> items,
+                                   OrderStatus status, LocalDateTime createdAt, Money totalAmount) {
+        return new Order(id, customerId, items, status, createdAt, totalAmount);
     }
 }

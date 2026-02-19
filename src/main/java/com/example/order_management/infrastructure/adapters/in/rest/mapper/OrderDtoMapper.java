@@ -1,77 +1,74 @@
 package com.example.order_management.infrastructure.adapters.in.rest.mapper;
 
-import com.example.order_management.application.ports.in.CreateOrderUseCase;
-import com.example.order_management.domain.model.Order;
-import com.example.order_management.domain.model.OrderItem;
+import com.example.order_management.application.ports.in.dto.CreateOrderCommand;
+import com.example.order_management.application.ports.out.dto.OrderOutputDto;
 import com.example.order_management.infrastructure.adapters.in.rest.dto.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * Mapper between DTOs and Domain models.
+ * Mapper between REST DTOs and application DTOs.
  */
 @Component
 public class OrderDtoMapper {
-    
+
     /**
-     * Converts CreateOrderRequest to CreateOrderUseCase.OrderItemRequest list.
+     * Converts CreateOrderRequest to application CreateOrderCommand.
      */
-    public List<CreateOrderUseCase.OrderItemRequest> toOrderItemRequests(
-            List<CreateOrderRequest.OrderItemRequest> items) {
-        return items.stream()
-            .map(item -> new CreateOrderUseCase.OrderItemRequest(
+    public CreateOrderCommand toCreateOrderCommand(CreateOrderRequest request) {
+        List<CreateOrderCommand.CreateOrderItemCommand> items = request.items().stream()
+            .map(item -> new CreateOrderCommand.CreateOrderItemCommand(
                 item.productId(),
                 item.quantity(),
                 item.unitPrice(),
-                "USD" // Default currency, can be extracted from request if needed
+                "USD"
             ))
-            .collect(Collectors.toList());
+            .toList();
+        return new CreateOrderCommand(request.customerId(), items);
     }
-    
+
     /**
-     * Converts Domain Order to OrderResponse.
+     * Converts application OrderOutputDto to OrderResponse.
      */
-    public OrderResponse toOrderResponse(Order order) {
-        List<OrderResponse.OrderItemResponse> itemResponses = order.getItems().stream()
+    public OrderResponse toOrderResponse(OrderOutputDto dto) {
+        List<OrderResponse.OrderItemResponse> itemResponses = dto.items().stream()
             .map(item -> new OrderResponse.OrderItemResponse(
-                item.getProductId(),
-                item.getQuantity(),
-                item.getUnitPrice().getAmount()
+                item.productId(),
+                item.quantity(),
+                item.unitPrice()
             ))
-            .collect(Collectors.toList());
-        
+            .toList();
         return new OrderResponse(
-            order.getId(),
-            order.getCustomerId(),
-            order.getStatus().name(),
+            dto.orderId(),
+            dto.customerId(),
+            dto.status(),
             itemResponses,
-            order.getTotalAmount().getAmount(),
-            order.getTotalAmount().getCurrency(),
-            order.getCreatedAt()
+            dto.totalAmount(),
+            dto.currency(),
+            dto.createdAt()
         );
     }
-    
+
     /**
-     * Converts Domain Order to CreateOrderResponse.
+     * Converts application OrderOutputDto to CreateOrderResponse.
      */
-    public CreateOrderResponse toCreateOrderResponse(Order order) {
+    public CreateOrderResponse toCreateOrderResponse(OrderOutputDto dto) {
         return new CreateOrderResponse(
-            order.getId(),
-            order.getStatus().name(),
-            order.getTotalAmount().getAmount(),
-            order.getCreatedAt()
+            dto.orderId(),
+            dto.status(),
+            dto.totalAmount(),
+            dto.createdAt()
         );
     }
-    
+
     /**
-     * Converts Domain Order to PayOrderResponse.
+     * Converts application OrderOutputDto to PayOrderResponse.
      */
-    public PayOrderResponse toPayOrderResponse(Order order) {
+    public PayOrderResponse toPayOrderResponse(OrderOutputDto dto) {
         return new PayOrderResponse(
-            order.getId(),
-            order.getStatus().name()
+            dto.orderId(),
+            dto.status()
         );
     }
 }
