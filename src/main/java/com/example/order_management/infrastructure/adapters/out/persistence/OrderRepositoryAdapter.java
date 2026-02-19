@@ -26,13 +26,18 @@ public class OrderRepositoryAdapter implements OrderRepositoryPort {
     
     @Override
     public Order save(Order order) {
-        // Check if order exists to preserve item IDs; fetch with items in one query
         OrderEntity existingEntity = null;
         if (order.getId() != null) {
             existingEntity = jpaRepository.findByIdWithItems(order.getId()).orElse(null);
         }
 
-        OrderEntity entity = mapper.toEntity(order, existingEntity);
+        OrderEntity entity;
+        if (existingEntity != null) {
+            mapper.updateEntity(order, existingEntity);
+            entity = existingEntity;
+        } else {
+            entity = mapper.toNewEntity(order);
+        }
         OrderEntity savedEntity = jpaRepository.save(entity);
         return mapper.toDomain(savedEntity);
     }

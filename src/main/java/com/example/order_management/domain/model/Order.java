@@ -59,6 +59,7 @@ public class Order {
     /**
      * Private constructor for reconstructing an Order from persistence.
      * Bypasses business rule validations; state is assumed valid from DB.
+     * When totalAmount is null, derives default currency from first item if present.
      */
     private Order(UUID id, UUID customerId, List<OrderItem> items, OrderStatus status,
                   LocalDateTime createdAt, Money totalAmount) {
@@ -67,7 +68,15 @@ public class Order {
         this.items = items != null ? new ArrayList<>(items) : new ArrayList<>();
         this.status = status;
         this.createdAt = createdAt;
-        this.totalAmount = totalAmount != null ? totalAmount : new Money(BigDecimal.ZERO, "USD");
+        if (totalAmount == null) {
+            String currency = "USD";
+            if (!this.items.isEmpty()) {
+                currency = this.items.get(0).getUnitPrice().getCurrency();
+            }
+            this.totalAmount = new Money(BigDecimal.ZERO, currency);
+        } else {
+            this.totalAmount = totalAmount;
+        }
     }
     
     public UUID getId() {

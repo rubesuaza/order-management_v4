@@ -11,18 +11,15 @@ import com.example.order_management.domain.exception.OrderNotFoundException;
 import com.example.order_management.domain.model.Money;
 import com.example.order_management.domain.model.Order;
 import com.example.order_management.domain.model.OrderItem;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 /**
  * Application service implementing use cases for order management.
+ * Framework-agnostic; no Spring annotations. Wired and transaction management
+ * are handled by the infrastructure layer (OrderServiceAdapter).
  */
-@Service
-@Transactional
 public class OrderService implements CreateOrderUseCase, GetOrderUseCase, PayOrderUseCase {
 
     private final OrderRepositoryPort orderRepository;
@@ -50,7 +47,6 @@ public class OrderService implements CreateOrderUseCase, GetOrderUseCase, PayOrd
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<OrderOutputDto> getOrderById(UUID orderId) {
         return orderRepository.findById(orderId).map(this::toOutputDto);
     }
