@@ -35,6 +35,21 @@ export class Order {
     this.totalAmount = totalAmount;
   }
 
+  /**
+   * Reconstructs an Order from persistence (no business validations).
+   * Used by infrastructure mappers when loading from DB.
+   */
+  static reconstitute(
+    id: OrderId,
+    status: OrderStatus,
+    createdAt: Date,
+    items: ReadonlyArray<OrderItem>,
+    customerId: string,
+    totalAmount: Money,
+  ): Order {
+    return new Order(id, status, createdAt, items, customerId, totalAmount);
+  }
+
   static create(
     id: OrderId,
     customerId: string,
