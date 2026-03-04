@@ -60,10 +60,12 @@ export class Order {
         'An Order must have at least one OrderItem to be created or finalized',
       );
     }
-    let total: Money = items[0].getLineTotal();
-    for (let i = 1; i < items.length; i++) {
-      total = total.add(items[i].getLineTotal());
-    }
+    const total = items
+      .slice(1)
+      .reduce(
+        (acc, item) => acc.add(item.getLineTotal()),
+        items[0].getLineTotal(),
+      );
     return new Order(
       id,
       OrderStatus.PENDING,
@@ -74,13 +76,17 @@ export class Order {
     );
   }
 
+  private meetsMinimumOrderAmount(): boolean {
+    return this.totalAmount.amount >= MINIMUM_ORDER_AMOUNT_USD;
+  }
+
   markAsPaid(): Order {
     if (this.status !== OrderStatus.PENDING) {
       throw new InvalidOrderStateException(
         'Order can only be marked as PAID when in PENDING status',
       );
     }
-    if (this.totalAmount.amount < MINIMUM_ORDER_AMOUNT_USD) {
+    if (!this.meetsMinimumOrderAmount()) {
       throw new InvalidOrderStateException(
         'Order cannot be placed (status PAID): minimum order value is 10.00 USD',
       );
@@ -111,13 +117,23 @@ export class Order {
     );
   }
 
+  private isShippedOrDelivered(): boolean {
+    return (
+      this.status === OrderStatus.SHIPPED || this.status === OrderStatus.DELIVERED
+    );
+  }
+
+  private isAlreadyCancelled(): boolean {
+    return this.status === OrderStatus.CANCELLED;
+  }
+
   cancel(): Order {
-    if (this.status === OrderStatus.SHIPPED || this.status === OrderStatus.DELIVERED) {
+    if (this.isShippedOrDelivered()) {
       throw new InvalidOrderStateException(
         'A SHIPPED or DELIVERED order cannot be cancelled',
       );
     }
-    if (this.status === OrderStatus.CANCELLED) {
+    if (this.isAlreadyCancelled()) {
       throw new InvalidOrderStateException(
         'Order is already CANCELLED',
       );

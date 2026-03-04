@@ -7,6 +7,10 @@ import { OrderEntity } from '../entities/order.entity';
 import { OrderItemEntity } from '../entities/order-item.entity';
 
 export class OrderMapper {
+  private static mapStatusFromPersistence(status: string): OrderStatus {
+    return (OrderStatus[status as keyof typeof OrderStatus] ?? OrderStatus.PENDING) as OrderStatus;
+  }
+
   /**
    * Reconstruct domain aggregate from persistence (e.g. after findById).
    */
@@ -20,7 +24,7 @@ export class OrderMapper {
         new Money(parseFloat(itemEntity.unitPrice), currency),
       ),
     );
-    const status = (OrderStatus[entity.status as keyof typeof OrderStatus] ?? OrderStatus.PENDING) as OrderStatus;
+    const status = OrderMapper.mapStatusFromPersistence(entity.status);
     return Order.reconstitute(
       createOrderId(entity.id),
       status,

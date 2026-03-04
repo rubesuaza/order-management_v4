@@ -1,0 +1,118 @@
+{
+  "status": "needs_correction",
+  "audit_evidence": {
+    "files_inspected": [
+      "package.json",
+      "tsconfig.json",
+      "nest-cli.json",
+      "src/domain/entities/order.ts",
+      "src/domain/entities/order-item.ts",
+      "src/domain/value-objects/money.ts",
+      "src/domain/value-objects/address.ts",
+      "src/domain/exception/domain.exception.ts",
+      "src/domain/exception/order-not-found.exception.ts",
+      "src/domain/exception/index.ts",
+      "src/domain/order-id.ts",
+      "src/domain/order-status.enum.ts",
+      "src/infrastructure/http/controllers/orders.controller.ts",
+      "src/infrastructure/http/filters/domain-exception.filter.ts",
+      "src/infrastructure/http/dto/create-order.dto.ts",
+      "src/infrastructure/persistence/entities/order.entity.ts",
+      "src/infrastructure/persistence/entities/order-item.entity.ts",
+      "src/infrastructure/persistence/repositories/order.repository.ts",
+      "src/infrastructure/persistence/mappers/order.mapper.ts",
+      "src/application/ports/order-repository.port.ts",
+      "src/application/services/create-order.service.ts",
+      "src/main.ts",
+      "src/app.module.ts"
+    ],
+    "commands_run": [
+      "find . -type d | sort",
+      "find . -type f \\( -name \"*.ts\" -o -name \"*.json\" \\) | sort",
+      "grep -r currency/Currency src/domain",
+      "grep -r from.*application|infrastructure src/domain",
+      "grep ValidationPipe|UseFilters|ExceptionFilter src",
+      "ls -la, ls .* (root and hidden files)",
+      "ls test/ and lock files"
+    ]
+  },
+  "checklist_compliance": {
+    "passed_items": [
+      "TypeScript 5.4+ strict and decorators (tsconfig strict: true, experimentalDecorators)",
+      "Node.js 20 LTS (engines in package.json)",
+      "NestJS 10+ (dependencies present)",
+      "npm/pnpm build system with package.json",
+      "Directory structure: src/domain, src/application, src/infrastructure",
+      "Order aggregate with OrderId, status, items, totalAmount",
+      "OrderItem entity",
+      "Money value object (immutable, decimal via number rounding)",
+      "Address value object",
+      "Empty order invariant (at least one item)",
+      "Total calculation totalAmount = sum(unitPrice * quantity)",
+      "Minimum order 10.00 USD for payment",
+      "Quantities > 0 and prices non-negative (OrderItem.create + DTO @Min(1), @Min(0))",
+      "Currency consistency (Money.add throws CurrencyMismatchException)",
+      "State transitions: CANCELLED from PENDING|PAID; SHIPPED from PAID",
+      "Domain exceptions: DomainException, InvalidOrderStateException, InvalidItemException, CurrencyMismatchException, OrderNotFoundException",
+      "Database: orders and order_items tables (TypeORM entities), UUID PK, FK, indexes on customer_id and status",
+      "TypeORM entities separate from domain; mappers Domain <-> TypeORM",
+      "Transactions at application level (DataSource.transaction in repository)",
+      "Persistence adapter implementing output port (OrderRepository -> IOrderRepository)",
+      "NestJS modules (AppModule encapsulating layers)",
+      "POST /orders, GET /orders/:orderId, POST /orders/:orderId/pay under API prefix",
+      "Request/Response DTOs (CreateOrderDto, OrderDetailResponseDto, etc.)",
+      "class-validator on DTOs (IsUUID, IsPositive, Min, ValidateNested, ArrayMinSize)",
+      "ExceptionFilter mapping domain exceptions to 400, 404, 409",
+      "Swagger/OpenAPI (DocumentBuilder, SwaggerModule in main.ts)",
+      "Unit tests for domain (order.spec, order-item.spec, money.spec, address.spec)",
+      "Service tests for application (create-order, get-order, pay-order .spec)",
+      "Mapper test (order.mapper.spec.ts)",
+      "No infrastructure/application imports in domain"
+    ],
+    "failed_items": [
+      "ESLint + Prettier: packages in devDependencies but no .eslintrc* or .prettierrc* or eslintConfig in package.json — code style enforcement not configured",
+      "Lock file: no package-lock.json or pnpm-lock.yaml found — build reproducibility not enforced",
+      "Jest coverageThreshold (80% minimum) not configured in package.json or jest config",
+      "Integration/e2e: test/e2e structure and jest-e2e.json referenced in script but test/ directory missing — test:e2e script broken",
+      "Global ExceptionFilter: DomainExceptionFilter is applied per-controller (@UseFilters on OrdersController), not via app.useGlobalFilters() — may be acceptable if single API surface"
+    ]
+  },
+  "structure_compliance": {
+    "score": 1,
+    "missing_paths": []
+  },
+  "test_results": {
+    "command": "npm test (or jest)",
+    "passed": null,
+    "total": 8,
+    "failures": null,
+    "output_summary": "Test execution not run (npm/node not in PATH in audit environment). Eight spec files present: order.spec.ts, order-item.spec.ts, money.spec.ts, address.spec.ts, create-order.service.spec.ts, get-order.service.spec.ts, pay-order.service.spec.ts, order.mapper.spec.ts. Zero-tolerance policy: cannot confirm pass/fail without running tests."
+  },
+  "gaps": [
+    {
+      "severity": "critical",
+      "category": "infrastructure",
+      "description": "ESLint and Prettier are in devDependencies but no configuration file (.eslintrc.js, .prettierrc, or package.json eslintConfig) found. Code style enforcement is not actually configured.",
+      "fix_suggestion": "Add .eslintrc.js (or .eslintrc.json) extending @typescript-eslint and eslint-config-prettier; add .prettierrc with project style. Run eslint --init if needed."
+    },
+    {
+      "severity": "critical",
+      "category": "tests",
+      "description": "Jest coverageThreshold for minimum 80% is not set. Checklist requires 'Minimum 80% code coverage enforced via Jest coverageThreshold'.",
+      "fix_suggestion": "Add to package.json (or jest config): \"jest\": { \"coverageThreshold\": { \"global\": { \"branches\": 80, \"functions\": 80, \"lines\": 80, \"statements\": 80 } } }."
+    },
+    {
+      "severity": "medium",
+      "category": "infrastructure",
+      "description": "Script test:e2e points to ./test/jest-e2e.json but directory test/ does not exist. Integration tests with @nestjs/testing and test DB are required by checklist.",
+      "fix_suggestion": "Create test/ directory and jest-e2e.json (or move e2e config into project root). Add at least one integration test for an infrastructure adapter (e.g. OrderRepository with test DB)."
+    },
+    {
+      "severity": "medium",
+      "category": "infrastructure",
+      "description": "No lock file (package-lock.json or pnpm-lock.yaml) in repository. Checklist requires build system with lock file.",
+      "fix_suggestion": "Run npm install or pnpm install and commit the generated lock file."
+    }
+  ],
+  "next_recommended_action": "implement_infrastructure"
+}
